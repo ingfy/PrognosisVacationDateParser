@@ -1,0 +1,32 @@
+{
+  "name": "date-range-format",
+  "version": "0.0.1",
+  "description": "Parser for dates and ranges with number of hours",
+  "main": "dist/format.js",
+  "readme": "README.md",
+  "repository": "https://github.com/ingfy/stæsj",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "date",
+    "parsing",
+    "range",
+    "hours"
+  ],
+  "author": "Yngve Svalestuen",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^9.0.3",
+    "gulp": "^3.8.11",
+    "gulp-mocha": "^2.0.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sourcemaps": "^1.5.0",
+    "gulp-uglify": "^1.1.0",
+    "mocha": "^2.2.1",
+    "vinyl-transform": "^1.0.0"
+  }
+}
