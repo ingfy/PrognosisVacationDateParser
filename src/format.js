@@ -7,7 +7,7 @@ var regExp = {
         monthPart: '(0?[1-9]|1[012])',
         yearPart: '((19|20|21)?\\d\\d)',
         hoursPart: '( (\\d([\\.|\\,]\\d*)?) ?(t|h|(timer)|(hours)|(hrs?)|(tm?r)))',
-        completedDay: '(0[1-9]|[12]\d|3[01])',
+        completedDay: '(0[1-9]|[12]\d|3[01]|[4-9])',
         completedMonth: '(0[1-9]|1[012]|[2-9])'
     },
 
@@ -37,7 +37,7 @@ var patterns = {
         day: new RegExp('^' + regExp.build('completedDay') + '$')
     },
     started: {
-        hours: new RegExp('^' + regExp.build('dayPart', 'sep', 'monthPart', 'sep', 'yearPart') + '( (.*))$'),
+        hours: new RegExp('^' + regExp.build('dayPart', 'sep', 'monthPart', 'sep', 'yearPart') + '( ([^\\-]*))$'),
         year: new RegExp('^' + regExp.build('dayPart', 'sep', 'monthPart', 'sep') + '([\\d]{0,3})$'),
         month: new RegExp('^' + regExp.build('dayPart', 'sep') + '([0-1]?)$'),
         day: new RegExp('^([0-3]?)$')
@@ -72,16 +72,18 @@ DateTest.prototype.test = function (str) {
     return this.testFunction(result, completed);
 };
 
-function CompletePart(year, nr, day) {
+function CompletePart(year, nr, day, hours) {
     this.year = year;
     this.nr = nr;
     this.day = day;
+    this.hours = hours;
 }
 
-function IncompletePart(yearString, monthString, dayString) {
+function IncompletePart(yearString, monthString, dayString, hoursString) {
     this.yearString = yearString;
     this.monthString = monthString;
     this.dayString = dayString;
+    this.hoursString = hoursString;
 }
 
 function DateTestResult(matches, complete, completePart, incompletePart) {
@@ -93,16 +95,18 @@ function DateTestResult(matches, complete, completePart, incompletePart) {
     this.incompletePart = incompletePart;
 }
 
+DateTestResult.prototype.isRange = function () { return false; };
+
 var tests = {};
 tests.hours = new DateTest(patterns.completed.hours, patterns.started.hours, function (parseResult, completed) {
-    if (parseresult) {
+    if (parseResult) {
         var day = ~~parseResult[1],
             nr = ~~parseResult[2] - 1,
             yearString = parseResult[3],
             yearValue = yearString.length === 2 ? ~~('20' + yearString) : ~~yearString,
-            hoursString = parseResult[5];
+            hoursString = parseResult[6];
 
-        var completePart = new CompletePart(yearValue, nr, day, completed ? ~~hoursString : null),
+        var completePart = new CompletePart(yearValue, nr, day, completed ? parseFloat(hoursString) : null),
             incompletePart = new IncompletePart(null, null, null, !completed ? hoursString : null);
 
         var date = getDateIfValid(completePart.year, completePart.nr, completePart.day);
@@ -174,6 +178,8 @@ function RangeTestResult(matches, firstDate, secondDateTestResult) {
     this.secondResult = secondDateTestResult;
 }
 
+RangeTestResult.prototype.isRange = function () { return true; };
+
 function isRange(str) { return str.indexOf(RANGE_PARTS_SEP) > -1; }
 
 RangeTest.prototype.test = function (str) {
@@ -198,11 +204,29 @@ tests.rangeYear = new RangeTest(tests.year);
 tests.rangeMonth = new RangeTest(tests.month);
 tests.rangeDay = new RangeTest(tests.day);
 
+function ParseResult(isRange, testName, result) {
+    this.isRange = isRange;
+    this.dateType = testName;
+    this.parseResult = result;
+}
+
 module.exports = {
     singleDayNumberFormat: new RegExp('^' + regExp.build('dayPart', 'sep', 'monthPart', 'sep', 'hoursPart') + '?' + '$'),
     singleDayWithYearFormat: new RegExp('^' + regExp.build('dayPart', 'sep', 'monthPart', 'sep', 'yearPart', 'hoursPart') + '?' + '$'),
 
-    isRange: isRange,
+    tests: tests,
 
-    tests: tests
+    parse: function (str) {
+        var testNames = ['rangeYear', 'rangeMonth', 'rangeDay', 'hours', 'year', 'month', 'day'];
+
+        for (var i = 0; i < testNames.length; i++) {
+            var test = tests[testNames[i]],
+                result = test.test(str);
+
+            if (result && result.matches)
+                return new ParseResult(result.isRange(), testNames[i], result);
+        }
+
+        return null;
+    }
 };

@@ -20,5 +20,13 @@ describe('format', function () {
             assert.equal(result.secondResult.completePart.nr, 11, 'month nr');
             assert.equal(result.secondResult.completePart.year, 2012, 'year');
         });
+
+        it('should match when second date is before first date [01.01.1999 - 31.12.1998]', function () {
+            var input = '01.01.1999 - 31.12.1998';
+
+            var result = format.tests.rangeYear.test(input);
+
+            assert.equal(result.matches, true, 'matches');
+        });
     });
 });

@@ -49,5 +49,16 @@ describe('format', function () {
 
             assert.equal(result.matches, false, 'matches');
         });
+
+        it('should match guaranteed complete single-digit day [6]', function () {
+            var input = '6';
+
+            var result = format.tests.day.test(input);
+
+            assert.equal(result.matches, true, 'matches');
+            assert.equal(result.complete, true, 'complete');
+
+            assert.equal(result.completePart.day, 6, 'day');
+        });
     });
 });
