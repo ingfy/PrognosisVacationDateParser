@@ -5,7 +5,8 @@ var browserify = require('browserify'),
     transform = require('vinyl-transform'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    mocha = require('gulp-mocha');
 
 var getBundleName = function () {
     var version = require('./package.json').version;
@@ -30,6 +31,15 @@ gulp.task('javascript', function () {
     .pipe(gulp.dest('./dist/'));
 });
 
+gulp.task('test', function () {
+    return gulp.src(['test/test*.js'], {read: false})
+        .pipe(mocha());
+});
 
+gulp.task('watch-test', function () {
+    gulp.watch(['src/**', 'test/**'], ['test']);
+})
+
+gulp.task('watch', ['watch-test']);
 
 gulp.task('default', ['javascript']);
