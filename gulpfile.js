@@ -6,7 +6,8 @@ var browserify = require('browserify'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
     rename = require('gulp-rename'),
-    mocha = require('gulp-mocha');
+    mocha = require('gulp-mocha'),
+    node2angular = require('gulp-node-to-angular-service');
 
 var getBundleName = function () {
     var version = require('./package.json').version;
@@ -14,7 +15,7 @@ var getBundleName = function () {
     return version + '.' + name + '.' + 'min';
 };
 
-gulp.task('javascript', function () {
+gulp.task('browserify', function () {
   // transform regular node stream to gulp (buffered vinyl) stream
   var browserified = transform(function(filename) {
     var b = browserify();
@@ -29,6 +30,13 @@ gulp.task('javascript', function () {
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('angular-service', function () {
+    return gulp.src('./src/format.js')
+        .pipe(node2angular({moduleName: 'cibernosis', serviceName: 'dateParser'}))
+        .pipe(rename('dateParserService.js'))
+        .pipe(gulp.dest('./dist/angular/'));
 });
 
 gulp.task('test', function () {
