@@ -1,8 +1,8 @@
 {
-  "name": "date-range-format",
+  "name": "pvd-parser",
   "version": "0.0.1",
   "description": "Parser for dates and ranges with number of hours",
-  "main": "dist/format.js",
+  "main": "index.js",
   "readme": "README.md",
   "repository": "https://github.com/ingfy/stæsj",
   "directories": {
