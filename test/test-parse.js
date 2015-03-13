@@ -154,6 +154,50 @@ describe('format', function () {
             assert.equal(result.dateType, 'year', 'dateType = year');
         });
 
+        it('should detect single date with complete month [9.9]', function () {
+            var input = '9.9';
+
+            var result = format.parse(input);
+
+            assert.notEqual(result, null, 'result is not null');
+
+            assert.equal(result.isRange, false, 'result is not a range');
+            assert.equal(result.dateType, 'month', 'dateType = month');
+        });
+
+        it('should detect single date with incomplete month [7.]', function () {
+            var input = '7.';
+
+            var result = format.parse(input);
+
+            assert.notEqual(result, null, 'result is not null');
+
+            assert.equal(result.isRange, false, 'result is not a range');
+            assert.equal(result.dateType, 'month', 'dateType = month');
+        });
+
+        it('should detect complete single day [10]', function () {
+            var input = '10';
+
+            var result = format.parse(input);
+
+            assert.notEqual(result, null, 'result is not null');
+
+            assert.equal(result.isRange, false, 'result is not a range');
+            assert.equal(result.dateType, 'day', 'dateType = day');
+        });
+
+        it('should detect incomplete single day [1]', function () {
+            var input = '1';
+
+            var result = format.parse(input);
+
+            assert.notEqual(result, null, 'result is not null');
+
+            assert.equal(result.isRange, false, 'result is not a range');
+            assert.equal(result.dateType, 'day', 'dateType = day');
+        });
+
         /* negative examples */
         it('should not detect gibberish [asd123gsfdl--23/\213\\\\123¡@£œ$]', function () {
             var input = 'asd123gsfdl--23/\213\\\\123¡@£œ$';
