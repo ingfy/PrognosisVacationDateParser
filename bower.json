@@ -1,0 +1,24 @@
+{
+  "name": "PrognosisVacationDateParser",
+  "version": "1.0.0",
+  "authors": [
+    "yngsva <yngve.svalestuen@ciber.com>"
+  ],
+  "description": "Date parser for Ciber Prognosis app",
+  "main": "dist/angular/dateParserService.js",
+  "keywords": [
+    "angular",
+    "prognosis",
+    "date",
+    "parser"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
