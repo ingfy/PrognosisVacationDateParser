@@ -15,6 +15,17 @@ describe('format', function () {
             assert.equal(result.completePart.day, 31, 'day');
         });
 
+        it('should match complete day [10]', function () {
+            var input = '10';
+
+            var result = format.tests.day.test(input);
+
+            assert.equal(result.matches, true, 'matches');
+            assert.equal(result.complete, true, 'complete');
+
+            assert.equal(result.completePart.day, 10, 'day');
+        });
+
         it('should match incomplete day [0]', function () {
             var input = '0';
 
