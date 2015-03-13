@@ -7,7 +7,7 @@ var regExp = {
         monthPart: '(0?[1-9]|1[012])',
         yearPart: '((19|20|21)?\\d\\d)',
         hoursPart: '( (\\d([\\.|\\,]\\d*)?) ?(t|h|(timer)|(hours)|(hrs?)|(tm?r)))',
-        completedDay: '(0[1-9]|[12]\d|3[01]|[4-9])',
+        completedDay: '(0[1-9]|[12]\\d|3[01]|[4-9])',
         completedMonth: '(0[1-9]|1[012]|[2-9])'
     },
 
